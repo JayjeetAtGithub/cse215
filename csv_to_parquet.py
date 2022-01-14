@@ -1,10 +1,12 @@
+import os
 import sys
 
 import pyarrow.csv as csv
 
 if __name__ == "__main__":
     table_name = str(sys.argv[1])
-    destination_dir = str(sys.argv[2])
+    source_dir = str(sys.argv[2])
+    destination_dir = str(sys.argv[3])
 
     # Read the schema file and parse the column names
     with open(f'schemas/{table_name}', 'r') as f:
@@ -20,9 +22,9 @@ if __name__ == "__main__":
     # applying the provided schema
     parse_options = csv.ParseOptions(delimiter='|')
     read_options = csv.ReadOptions(column_names=cols)
-    table = csv.read_csv(f'{table_name}.tbl', read_options=read_options, parse_options=parse_options)
+    table = csv.read_csv(os.path.join(source_dir, f'{table_name}.tbl'), read_options=read_options, parse_options=parse_options)
     print(table.schema)
 
     # Write the table to a parquet file
-    table.to_parquet(f'{destination_dir}/{table_name}.parquet', compression='snappy')
+    table.to_parquet(os.path.join(destination_dir, f'{table_name}.parquet'), compression='snappy')
     print(f'{table_name}.parquet file created.')
