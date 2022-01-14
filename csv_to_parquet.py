@@ -1,6 +1,8 @@
 import os
 import sys
 
+import pyarrow as pa
+import pyarrow.parquet as pq
 import pyarrow.csv as csv
 
 if __name__ == "__main__":
@@ -26,5 +28,5 @@ if __name__ == "__main__":
     print(table.schema)
 
     # Write the table to a parquet file
-    table.to_parquet(os.path.join(destination_dir, f'{table_name}.parquet'), compression='snappy')
+    pq.write_table(table, os.path.join(destination_dir, f'{table_name}.parquet'), compression='snappy')
     print(f'{table_name}.parquet file created.')
