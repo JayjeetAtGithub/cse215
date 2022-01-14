@@ -18,4 +18,6 @@ if __name__ == "__main__":
 
     record_batch_reader = query.fetch_record_batch()
     chunk = record_batch_reader.read_next_batch()
-    print(chunk.to_pandas())
+    while chunk is not None:
+        print(chunk.to_pandas())
+        chunk = record_batch_reader.read_next_batch()
