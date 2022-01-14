@@ -20,4 +20,7 @@ if __name__ == "__main__":
     chunk = record_batch_reader.read_next_batch()
     while chunk is not None:
         print(chunk.to_pandas())
-        chunk = record_batch_reader.read_next_batch()
+        try:
+            chunk = record_batch_reader.read_next_batch()
+        except:
+            break
