@@ -1,4 +1,6 @@
 import os
+import sys
+import time
 
 import duckdb
 import pyarrow.dataset as ds
@@ -14,44 +16,21 @@ if __name__ == "__main__":
 
     conn = duckdb.connect()
 
-    query = conn.execute("""
-SELECT
-    cntrycode,
-    count(*) AS numcust,
-    sum(c_acctbal) AS totacctbal
-FROM (
-    SELECT
-        substring(c_phone FROM 1 FOR 2) AS cntrycode,
-        c_acctbal
-    FROM
-        customer
-    WHERE
-        substring(c_phone FROM 1 FOR 2) IN ('13', '31', '23', '29', '30', '18', '17')
-        AND c_acctbal > (
-            SELECT
-                avg(c_acctbal)
-            FROM
-                customer
-            WHERE
-                c_acctbal > 0.00
-                AND substring(c_phone FROM 1 FOR 2) IN ('13', '31', '23', '29', '30', '18', '17'))
-            AND NOT EXISTS (
-                SELECT
-                    *
-                FROM
-                    orders
-                WHERE
-                    o_custkey = c_custkey)) AS custsale
-GROUP BY
-    cntrycode
-ORDER BY
-    cntrycode;""")
+    query_files = os.listdir('queries')
+    for query_file in query_files:
+        with open('queries/' + query_file, 'r') as f:
+            query = f.read()
 
-    record_batch_reader = query.fetch_record_batch()
-    chunk = record_batch_reader.read_next_batch()
-    while chunk is not None:
-        print(chunk.to_pandas())
-        try:
-            chunk = record_batch_reader.read_next_batch()
-        except:
-            break
+        s = time.time()
+        query = conn.execute(query)
+        
+        record_batch_reader = query.fetch_record_batch()
+        chunk = record_batch_reader.read_next_batch()
+        while chunk is not None:
+            print(chunk.to_pandas())
+            try:
+                chunk = record_batch_reader.read_next_batch()
+            except:
+                break
+        e = time.time()
+        print("time taken: ", e - s)
