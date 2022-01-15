@@ -16,26 +16,36 @@ if __name__ == "__main__":
 
     query = conn.execute("""
 SELECT
-    l_returnflag,
-    l_linestatus,
-    sum(l_quantity) AS sum_qty,
-    sum(l_extendedprice) AS sum_base_price,
-    sum(l_extendedprice * (1 - l_discount)) AS sum_disc_price,
-    sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) AS sum_charge,
-    avg(l_quantity) AS avg_qty,
-    avg(l_extendedprice) AS avg_price,
-    avg(l_discount) AS avg_disc,
-    count(*) AS count_order
-FROM
-    lineitem
-WHERE
-    l_shipdate <= CAST('1998-09-02' AS date)
+    cntrycode,
+    count(*) AS numcust,
+    sum(c_acctbal) AS totacctbal
+FROM (
+    SELECT
+        substring(c_phone FROM 1 FOR 2) AS cntrycode,
+        c_acctbal
+    FROM
+        customer
+    WHERE
+        substring(c_phone FROM 1 FOR 2) IN ('13', '31', '23', '29', '30', '18', '17')
+        AND c_acctbal > (
+            SELECT
+                avg(c_acctbal)
+            FROM
+                customer
+            WHERE
+                c_acctbal > 0.00
+                AND substring(c_phone FROM 1 FOR 2) IN ('13', '31', '23', '29', '30', '18', '17'))
+            AND NOT EXISTS (
+                SELECT
+                    *
+                FROM
+                    orders
+                WHERE
+                    o_custkey = c_custkey)) AS custsale
 GROUP BY
-    l_returnflag,
-    l_linestatus
+    cntrycode
 ORDER BY
-    l_returnflag,
-    l_linestatus;""")
+    cntrycode;""")
 
     record_batch_reader = query.fetch_record_batch()
     chunk = record_batch_reader.read_next_batch()
