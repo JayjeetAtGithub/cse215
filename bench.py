@@ -1,5 +1,4 @@
 import os
-import sys
 import time
 
 import duckdb
@@ -26,7 +25,11 @@ if __name__ == "__main__":
         query = conn.execute(query)
         
         record_batch_reader = query.fetch_record_batch()
-        chunk = record_batch_reader.read_next_batch()
+
+        try:
+            chunk = record_batch_reader.read_next_batch()
+        except:
+            break
         while chunk is not None:
             print(chunk.to_pandas())
             try:
