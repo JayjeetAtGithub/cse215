@@ -17,7 +17,7 @@ if __name__ == "__main__":
     conn = duckdb.connect()
 
     query_files = os.listdir('queries')
-    for query_file in query_files:
+    for query_no, query_file in enumerate(query_files):
         with open('queries/' + query_file, 'r') as f:
             query = f.read()
 
@@ -29,7 +29,7 @@ if __name__ == "__main__":
         try:
             chunk = record_batch_reader.read_next_batch()
         except:
-            break
+            pass
         while chunk is not None:
             print(chunk.to_pandas())
             try:
@@ -37,4 +37,4 @@ if __name__ == "__main__":
             except:
                 break
         e = time.time()
-        print("time taken: ", e - s)
+        print(f"query {query_no + 1}: ", e - s)
