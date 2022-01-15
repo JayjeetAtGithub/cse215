@@ -13,6 +13,7 @@ if __name__ == "__main__":
     nation   = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "nation.parquet"), format="parquet")
     orders   = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "orders.parquet"), format="parquet")
     part     = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "part.parquet"), format="parquet")
+    partsupp = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "partsupp.parquet"), format="parquet")
 
     conn = duckdb.connect()
 
