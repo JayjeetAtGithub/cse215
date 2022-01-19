@@ -75,7 +75,6 @@ class SplittedParquetWriter(object):
 if __name__ == "__main__":
     chunksize = 16 * 1024 * 1024 # 16MB
     dataset_dir = str(sys.argv[1])
-    destination = str(sys.argv[2])
     for root, dirs, files in os.walk(dataset_dir):
         for file in files:
             if file.endswith(".parquet"):
