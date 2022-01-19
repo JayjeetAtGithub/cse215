@@ -82,7 +82,7 @@ if __name__ == "__main__":
                 file_size = os.stat(file_path).st_size/(1024*1024)
                 print(f"{file_path} = {file_size} MB")
 
-                if file_size > (16*1024*1024):
+                if file_size > 16:
                     print(f"{os.path.join(root, file)} is larger than 16 MB, splitting")
                     writer = SplittedParquetWriter(file_path, os.path.basename(file_path), chunksize)
                     writer.write()
