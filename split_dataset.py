@@ -89,6 +89,6 @@ if __name__ == "__main__":
                     os.remove(file_path)
                 else:
                     table = pq.read_table(file_path)
+                    os.remove(file_path)
                     file_path = os.path.join(os.path.dirname(file_path), f"{uuid.uuid4().hex}.parquet")
                     write_file(file_path, table)
-                    os.remove(file_path)
