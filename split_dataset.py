@@ -9,6 +9,17 @@ import pyarrow.parquet as pq
 from concurrent.futures import ThreadPoolExecutor
 
 
+def write_file(filename, table):
+    open(filename, 'a').close()
+    attribute = "ceph.file.layout.object_size"
+    os.system(
+        f"setfattr -n {attribute} -v 16777216 {filename}")
+    pq.write_table(
+        table, filename,
+        row_group_size=table.num_rows, compression="snappy"
+    )
+
+
 class SplittedParquetWriter(object):
     def __init__(self, filename, destination, chunksize=128*1024*1024):
         self.filename = filename
@@ -16,16 +27,6 @@ class SplittedParquetWriter(object):
         self.chunksize = chunksize
 
     def round(self, num):
-        """
-        Round a number.
-        Parameter
-        ---------
-        num: The number to round off.
-        Returns
-        ---------
-        result: int
-            The rounded off number.
-        """
         num_str = str(int(num))
         result_str = ""
         result_str += num_str[0]
@@ -70,8 +71,6 @@ class SplittedParquetWriter(object):
         e_time = time.time()
         print(f"Finished writing in {e_time - s_time} seconds")
 
-
-
 if __name__ == "__main__":
     chunksize = 16 * 1024 * 1024 # 16MB
     dataset_dir = str(sys.argv[1])
@@ -87,4 +86,9 @@ if __name__ == "__main__":
                     writer = SplittedParquetWriter(file_path, os.path.dirname(file_path), chunksize)
                     writer.write()
                     print(f"{os.path.join(root, file)} is split")
+                    os.remove(file_path)
+                else:
+                    table = pq.read_table(file_path)
+                    file_path = os.path.join(os.path.dirname(file_path), f"{uuid.uuid4().hex}.parquet")
+                    write_file(file_path, table)
                     os.remove(file_path)
