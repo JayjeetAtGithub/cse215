@@ -1,18 +1,21 @@
 import os
+import sys
 import time
 
 import duckdb
 import pyarrow.dataset as ds
 
 if __name__ == "__main__":
-    lineitem = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "lineitem.parquet"), format="parquet")
-    supplier = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "supplier.parquet"), format="parquet")
-    customer = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "customer.parquet"), format="parquet")
-    region   = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "region.parquet"), format="parquet")
-    nation   = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "nation.parquet"), format="parquet")
-    orders   = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "orders.parquet"), format="parquet")
-    part     = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "part.parquet"), format="parquet")
-    partsupp = ds.dataset(os.path.join("/mnt/cephfs/tpch_parquet", "partsupp.parquet"), format="parquet")
+    dataset_path = str(sys.argv[1])
+    
+    lineitem = ds.dataset(os.path.join(dataset_path, "lineitem"), format="parquet")
+    supplier = ds.dataset(os.path.join(dataset_path, "supplier"), format="parquet")
+    customer = ds.dataset(os.path.join(dataset_path, "customer"), format="parquet")
+    region   = ds.dataset(os.path.join(dataset_path, "region"), format="parquet")
+    nation   = ds.dataset(os.path.join(dataset_path, "nation"), format="parquet")
+    orders   = ds.dataset(os.path.join(dataset_path, "orders"), format="parquet")
+    part     = ds.dataset(os.path.join(dataset_path, "part"), format="parquet")
+    partsupp = ds.dataset(os.path.join(dataset_path, "partsupp"), format="parquet")
 
     conn = duckdb.connect()
 
@@ -37,4 +40,4 @@ if __name__ == "__main__":
             except:
                 break
         e = time.time()
-        print(f"query {query_no + 1}: ", e - s)
+        print(f"Query {query_no + 1}: ", e - s)
