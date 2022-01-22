@@ -3,7 +3,7 @@ import sys
 
 import multiprocessing as mp
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def generate(index, num_procs):
@@ -15,5 +15,9 @@ if __name__ == "__main__":
     os.environ["DSS_PATH"] = "/mnt/cephfs/tpch_sf100"
     num_procs = mp.cpu_count()
     with ThreadPoolExecutor(max_workers=num_procs) as executor:
+        futures = list()
         for index in range(num_procs):
-            executor.submit(generate, index + 1, num_procs, table)
+            futures.append(executor.submit(generate, index + 1, num_procs, table))
+
+        for future in as_completed(futures):
+            print(future.result())
