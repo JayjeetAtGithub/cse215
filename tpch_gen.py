@@ -6,7 +6,7 @@ import multiprocessing as mp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-def generate(index, num_procs):
+def generate(index, num_procs, table):
     os.system(f"dbgen -vf -s 100 -C {num_procs} -S {index} -T {table} -f")
 
 
