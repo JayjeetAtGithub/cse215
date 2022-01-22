@@ -16,4 +16,4 @@ if __name__ == "__main__":
     num_procs = mp.cpu_count()
     with ThreadPoolExecutor(max_workers=num_procs) as executor:
         for index in range(num_procs):
-            executor.map(generate, index, num_procs, table)
+            executor.submit(generate, index + 1, num_procs, table)
