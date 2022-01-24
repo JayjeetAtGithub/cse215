@@ -1,5 +1,6 @@
 import os
 import sys
+from numpy import source
 
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -24,6 +25,9 @@ if __name__ == "__main__":
     # applying the provided schema
     parse_options = csv.ParseOptions(delimiter='|')
     read_options = csv.ReadOptions(column_names=cols)
+
+    source_dir = os.path.join(source_dir, table_name)
+    destination_dir = os.path.join(destination_dir, table_name)
 
     for filename in os.listdir(source_dir):
         table = csv.read_csv(os.path.join(source_dir, filename), read_options=read_options, parse_options=parse_options)
