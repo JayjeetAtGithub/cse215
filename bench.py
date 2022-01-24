@@ -8,6 +8,7 @@ import pyarrow.dataset as ds
 if __name__ == "__main__":
     dataset_path = str(sys.argv[1])
     format = str(sys.argv[2])
+    query_no = int(sys.argv[3])
 
     lineitem = ds.dataset(os.path.join(dataset_path, "lineitem"), format=format)
     supplier = ds.dataset(os.path.join(dataset_path, "supplier"), format=format)
@@ -20,25 +21,23 @@ if __name__ == "__main__":
 
     conn = duckdb.connect()
 
-    query_files = os.listdir('queries')
-    for query_no, query_file in enumerate(query_files):
-        with open('queries/' + query_file, 'r') as f:
-            query = f.read()
+    with open(f"queries/q{query_no}.sql", 'r') as f:
+        query = f.read()
 
-        s = time.time()
-        query = conn.execute(query)
-        
-        record_batch_reader = query.fetch_record_batch()
+    s = time.time()
+    query_cursor = conn.execute(query)
+    
+    record_batch_reader = query_cursor.fetch_record_batch()
 
+    try:
+        chunk = record_batch_reader.read_next_batch()
+    except:
+        pass
+    while chunk is not None:
+        print(chunk.to_pandas())
         try:
             chunk = record_batch_reader.read_next_batch()
         except:
-            pass
-        while chunk is not None:
-            print(chunk.to_pandas())
-            try:
-                chunk = record_batch_reader.read_next_batch()
-            except:
-                break
-        e = time.time()
-        print(f"Query {query_no + 1}: ", e - s)
+            break
+    e = time.time()
+    print(f"Query {query_no}: ", e - s)
