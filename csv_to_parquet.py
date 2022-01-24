@@ -30,5 +30,6 @@ if __name__ == "__main__":
         print(table.schema)
 
         # Write the table to a parquet file
+        os.makedirs(os.path.join(destination_dir), exist_ok=True)
         pq.write_table(table, os.path.join(destination_dir, f'{filename}.parquet'), compression='snappy')
         print(f'{filename}.parquet file created.')
