@@ -24,9 +24,11 @@ if __name__ == "__main__":
     # applying the provided schema
     parse_options = csv.ParseOptions(delimiter='|')
     read_options = csv.ReadOptions(column_names=cols)
-    table = csv.read_csv(os.path.join(source_dir, f'{table_name}.tbl'), read_options=read_options, parse_options=parse_options)
-    print(table.schema)
 
-    # Write the table to a parquet file
-    pq.write_table(table, os.path.join(destination_dir, f'{table_name}.parquet'), compression='snappy')
-    print(f'{table_name}.parquet file created.')
+    for filename in os.listdir(source_dir):
+        table = csv.read_csv(os.path.join(source_dir, filename), read_options=read_options, parse_options=parse_options)
+        print(table.schema)
+
+        # Write the table to a parquet file
+        pq.write_table(table, os.path.join(destination_dir, f'{filename}.parquet'), compression='snappy')
+        print(f'{filename}.parquet file created.')
