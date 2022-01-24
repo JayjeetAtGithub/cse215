@@ -12,5 +12,6 @@ if __name__ == "__main__":
 
                 if file_size > 16:
                     print(f"NOT OK! {file_path} = {file_size} MB")
+                    raise Exception(f"Too large file: {file_path} = {file_size} MB")
                 else:
                     print(f"OK ! {file_path} = {file_size} MB")
