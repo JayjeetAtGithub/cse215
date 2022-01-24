@@ -24,6 +24,8 @@ if __name__ == "__main__":
     with open(f"queries/q{query_no}.sql", 'r') as f:
         query = f.read()
 
+    query = f"PRAGMA threads=16;\n{query}"
+
     s = time.time()
     query_cursor = conn.execute(query)
     
