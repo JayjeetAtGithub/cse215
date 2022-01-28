@@ -50,7 +50,7 @@ if __name__ == "__main__":
                         break
                 e = time.time()
                 
-                log_str = f"{query_no} | {format} | {e - s} seconds"
+                log_str = f"{query_no}|{format}|{e - s}"
                 print(log_str)
                 with open("bench.log", "a") as f:
                     f.write(log_str + "\n")
