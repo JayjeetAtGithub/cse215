@@ -49,6 +49,12 @@ if __name__ == "__main__":
                     except:
                         break
                 e = time.time()
+                
+                log_str = f"{query_no} | {format} | {e - s} seconds"
+                print(log_str)
+                with open("bench.log", "a") as f:
+                    f.write(log_str + "\n")
+                
                 data.append({
                     "query": query_no,
                     "format": format,
