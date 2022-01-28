@@ -16,6 +16,7 @@ def drop_caches():
 
 
 if __name__ == "__main__":
+    os.remove("bench.log")
     dataset_path = str(sys.argv[1])
     data = list()
     formats = ["parquet", "skyhook"]
