@@ -53,18 +53,18 @@ if __name__ == "__main__":
                     except:
                         break
                 e = time.time()
-                
+
                 log_str = f"{query_no}|{format}|{e - s}"
                 print(log_str)
                 with open("bench.log", "a") as f:
                     f.write(log_str + "\n")
-                
+
                 data.append({
                     "query": query_no,
                     "format": format,
                     "latency": e - s
                 })
-            
+
     with open(f"result.json", "w") as f:
         f.write(json.dumps(data))
     print("Benchmark finished")
