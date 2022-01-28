@@ -57,3 +57,4 @@ if __name__ == "__main__":
             
     with open(f"result.json", "w") as f:
         f.write(json.dumps(data))
+    print("Benchmark finished")
