@@ -19,8 +19,7 @@ if __name__ == "__main__":
     os.system("echo ' ' > bench.log")
     dataset_path = str(sys.argv[1])
     query_no = int(sys.argv[2])
-    iterations = int(sys.argv[3])
-    format = str(sys.argv[4])
+    format = str(sys.argv[3])
 
     data = list()
     lineitem = ds.dataset(os.path.join(dataset_path, "lineitem"), format=format)
