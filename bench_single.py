@@ -16,9 +16,7 @@ def drop_caches():
 
 
 if __name__ == "__main__":
-    os.remove("bench.log")
-    with open("bench.log", "w") as f:
-        f.close()
+    os.system("echo ' ' > bench.log")
     dataset_path = str(sys.argv[1])
     query_no = int(sys.argv[2])
     iterations = int(sys.argv[3])
