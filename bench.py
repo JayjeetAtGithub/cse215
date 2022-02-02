@@ -42,6 +42,7 @@ if __name__ == "__main__":
                 s = time.time()
                 query_cursor = conn.execute(query)
                 record_batch_reader = query_cursor.fetch_record_batch()
+                chunk = None
                 try:
                     chunk = record_batch_reader.read_next_batch()
                 except Exception as e:
