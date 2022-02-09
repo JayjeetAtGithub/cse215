@@ -1,9 +1,15 @@
 # Benchmark Instructions
 
+0. Install dependencies.
+```
+sudo apt-get install git make gcc
+```
+
 1. Clone the TPCH kit github repository.
 ```
+
 git clone https://github.com/uccross/tpch-kit
-cd tpch-kit
+cd tpch-kit/
 ./run.sh
 ```
 
