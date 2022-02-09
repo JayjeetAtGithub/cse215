@@ -1,10 +1,27 @@
+from asyncio import futures
 import os
 import sys
 from numpy import source
 
-import pyarrow as pa
+import multiprocessing as mp
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import pyarrow.parquet as pq
 import pyarrow.csv as csv
+
+def convert(source_dir, destination_dir, filename):
+    # Read the csv file and convert it to a pyarrow table 
+    # applying the provided schema
+    parse_options = csv.ParseOptions(delimiter='|')
+    read_options = csv.ReadOptions(column_names=cols)
+    table = csv.read_csv(os.path.join(source_dir, filename), read_options=read_options, parse_options=parse_options)
+    print(table.schema)
+
+    # Write the table to a parquet file
+    os.makedirs(os.path.join(destination_dir), exist_ok=True)
+    pq.write_table(table, os.path.join(destination_dir, f'{filename}.parquet'), compression='snappy')
+    print(f'{filename}.parquet file created.')
+
 
 if __name__ == "__main__":
     source_dir = str(sys.argv[1])
@@ -31,20 +48,13 @@ if __name__ == "__main__":
             key = key.strip()
             type = type.strip()
             cols.append(key)
-        
-        # Read the csv file and convert it to a pyarrow table 
-        # applying the provided schema
-        parse_options = csv.ParseOptions(delimiter='|')
-        read_options = csv.ReadOptions(column_names=cols)
 
         source_dir = os.path.join(source_dir, table_name)
         destination_dir = os.path.join(destination_dir, table_name)
 
-        for filename in os.listdir(source_dir):
-            table = csv.read_csv(os.path.join(source_dir, filename), read_options=read_options, parse_options=parse_options)
-            print(table.schema)
+        with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
+            futures = [executor.submit(convert, source_dir, destination_dir, filename) for filename in os.listdir(source_dir)]
+            for future in as_completed(futures):
+                print(f'{table_name} file converted.')
 
-            # Write the table to a parquet file
-            os.makedirs(os.path.join(destination_dir), exist_ok=True)
-            pq.write_table(table, os.path.join(destination_dir, f'{filename}.parquet'), compression='snappy')
-            print(f'{filename}.parquet file created.')
+
