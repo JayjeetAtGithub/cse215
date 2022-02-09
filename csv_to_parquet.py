@@ -17,8 +17,6 @@ def convert(source_dir, destination_dir, filename):
     table = csv.read_csv(os.path.join(source_dir, filename), read_options=read_options, parse_options=parse_options)
     print(table.schema)
 
-    # Write the table to a parquet file
-    os.makedirs(os.path.join(destination_dir), exist_ok=True)
     pq.write_table(table, os.path.join(destination_dir, f'{filename}.parquet'), compression='snappy')
     print(f'{filename}.parquet file created.')
 
@@ -51,6 +49,7 @@ if __name__ == "__main__":
 
         source_dir = os.path.join(source_dir, table_name)
         destination_dir = os.path.join(destination_dir, table_name)
+        os.makedirs(os.path.join(destination_dir), exist_ok=True)
 
         with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
             futures = [executor.submit(convert, source_dir, destination_dir, filename) for filename in os.listdir(source_dir)]
