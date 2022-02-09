@@ -47,12 +47,12 @@ if __name__ == "__main__":
             type = type.strip()
             cols.append(key)
 
-        source_dir = os.path.join(source_dir, table_name)
-        destination_dir = os.path.join(destination_dir, table_name)
-        os.makedirs(os.path.join(destination_dir), exist_ok=True)
+        source_dir_m = os.path.join(source_dir, table_name)
+        destination_dir_m = os.path.join(destination_dir, table_name)
+        os.makedirs(os.path.join(destination_dir_m), exist_ok=True)
 
         with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
-            futures = [executor.submit(convert, source_dir, destination_dir, filename) for filename in os.listdir(source_dir)]
+            futures = [executor.submit(convert, source_dir_m, destination_dir_m, filename) for filename in os.listdir(source_dir)]
             for future in as_completed(futures):
                 print(f'{table_name} file converted.')
 
