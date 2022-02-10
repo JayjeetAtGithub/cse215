@@ -38,19 +38,8 @@ if __name__ == "__main__":
     for _ in range(5):
         drop_caches()
         s = time.time()
-        query_cursor = conn.execute(query)
-        record_batch_reader = query_cursor.fetch_record_batch()
-        chunk = None
-        try:
-            chunk = record_batch_reader.read_next_batch()
-        except Exception as e:
-            pass
-        while chunk is not None:
-            print(chunk.to_pandas())
-            try:
-                chunk = record_batch_reader.read_next_batch()
-            except:
-                break
+        result = conn.execute(query).fetchall()
+        print(result)
         e = time.time()
 
         log_str = f"{query_no}|{format}|{e - s}"
