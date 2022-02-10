@@ -16,7 +16,6 @@ def drop_caches():
 
 
 if __name__ == "__main__":
-    os.system("echo ' ' > bench.log")
     dataset_path = str(sys.argv[1])
     query_no = int(sys.argv[2])
     format = str(sys.argv[3])
@@ -56,8 +55,6 @@ if __name__ == "__main__":
 
         log_str = f"{query_no}|{format}|{e - s}"
         print(log_str)
-        with open("bench.log", "a") as f:
-            f.write(log_str + "\n")
 
         data.append({
             "query": query_no,
