@@ -13,6 +13,7 @@ def drop_caches():
     os.system("sync")
     os.system("echo 3 > /proc/sys/vm/drop_caches")
     os.system("sync")
+    time.sleep(2)
 
 
 if __name__ == "__main__":
@@ -33,14 +34,14 @@ if __name__ == "__main__":
     with open(f"queries/q{query_no}.sql", "r") as f:
         query = f.read()
 
-    conn = duckdb.connect()
     query = f"PRAGMA threads={mp.cpu_count()};\n{query}"
-    for _ in range(5):
+    for _ in range(10):
         drop_caches()
+        conn = duckdb.connect()
         s = time.time()
         result = conn.execute(query).fetchall()
-        print(result)
         e = time.time()
+        conn.close()
 
         log_str = f"{query_no}|{format}|{e - s}"
         print(log_str)
