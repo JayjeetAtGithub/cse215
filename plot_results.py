@@ -14,8 +14,9 @@ def clean_string(path):
 
 
 if __name__ == "__main__":
+    plt.rcParams["figure.figsize"] = (20, 10)
     result_dir = str(sys.argv[1])    
-    queries = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 22]
+    queries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     data = list()
 
     for query in queries:
@@ -30,11 +31,12 @@ if __name__ == "__main__":
         
         for point in parquet_result:
             data.append(point)
+            
         for point in skyhook_result:
             data.append(point)
 
     df = pd.DataFrame(data) 
     print(df)
 
-    sns.barplot(data=df, x="query", y="latency", hue="format")
-    plt.savefig("plot.pdf")
+    sns.barplot(data=df, ci="sd", x="query", y="latency", hue="format")
+    plt.savefig("plot_multi.pdf")
