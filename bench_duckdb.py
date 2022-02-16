@@ -29,26 +29,34 @@ if __name__ == "__main__":
     elif fmt == "pq":
         format_ = "parquet"
 
-    data = list()
-    for i in range(iterations):
-        drop_caches()
-        dataset_ = ds.dataset(directory, format=format_)
-        conn = duckdb.connect()
-        query = "SELECT * from dataset_"
-        #query = f"PRAGMA threads={mp.cpu_count()};\n{query}"
-        start = time.time()
-        record_batch_reader = conn.execute(query).fetch_record_batch(1024 * 1024)
-        chunk = record_batch_reader.read_next_batch()
-        while chunk is not None:
-            print(chunk.to_pandas())
-            try:
-                chunk = record_batch_reader.read_next_batch()
-            except:
-                break
-        end = time.time()
-        conn.close()
-        data.append(end-start)
-        print(end-start)
+    selectivity = ["100", "10", "1"]
+    data = dict()
+    for per in selectivity:
+        data[per] = list()
+        for i in range(iterations):
+            drop_caches()
+            dataset_ = ds.dataset(directory, format=format_)
+            conn = duckdb.connect()
+            if per == "100":
+                query = "SELECT * FROM _dataset"
+            if per == "10":
+                query = "SELECT * FROM _dataset WHERE total_amount > 27"
+            if per == "1":
+                query = "SELECT * FROM _dataset WHERE total_amount > 69"
 
-        with open(resultfile, 'w') as fp:
-            json.dump(data, fp)
+            start = time.time()
+            record_batch_reader = conn.execute(query).fetch_record_batch(100000)
+            chunk = record_batch_reader.read_next_batch()
+            while chunk is not None:
+                print(chunk.to_pandas())
+                try:
+                    chunk = record_batch_reader.read_next_batch()
+                except:
+                    break
+            end = time.time()
+            conn.close()
+            data[per].append(end-start)
+            print(end-start)
+
+            with open(resultfile, 'w') as fp:
+                json.dump(data, fp)
