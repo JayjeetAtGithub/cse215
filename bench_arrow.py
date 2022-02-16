@@ -40,7 +40,7 @@ if __name__ == "__main__":
             if per == "1":
                 filter_ = (ds.field("total_amount") > 69)
             start = time.time()
-            print(ds.Scanner.from_dataset(dataset_).to_reader().read_all().num_rows())
+            print(ds.Scanner.from_dataset(dataset_, filter=filter_).to_reader().read_all().num_rows())
             end = time.time()
             data[per].append(end-start)
             print(end-start)
