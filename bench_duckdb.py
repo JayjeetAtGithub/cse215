@@ -44,6 +44,7 @@ if __name__ == "__main__":
             if per == "1":
                 query = "SELECT * FROM dataset WHERE total_amount > 69"
 
+            query = f"PRAGMA threads={mp.cpu_count()};\n{query}"
             start = time.time()
             record_batch_reader = conn.execute(query).fetch_record_batch(100000)
             chunk = record_batch_reader.read_next_batch()
