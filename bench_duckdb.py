@@ -46,14 +46,8 @@ if __name__ == "__main__":
 
             query = f"PRAGMA threads={mp.cpu_count()};\n{query}"
             start = time.time()
-            record_batch_reader = conn.execute(query).fetch_record_batch(1000000)
-            chunk = record_batch_reader.read_next_batch()
-            while chunk is not None:
-                print(chunk.to_pandas())
-                try:
-                    chunk = record_batch_reader.read_next_batch()
-                except:
-                    break
+            df = conn.execute(query).fetchdf()
+            print(df)
             end = time.time()
             data[per].append(end-start)
             print(end-start)
