@@ -35,14 +35,14 @@ if __name__ == "__main__":
         data[per] = list()
         for i in range(iterations):
             drop_caches()
-            dataset_ = ds.dataset(directory, format=format_)
+            dataset = ds.dataset(directory, format=format_)
             conn = duckdb.connect()
             if per == "100":
-                query = "SELECT * FROM _dataset"
+                query = "SELECT * FROM dataset"
             if per == "10":
-                query = "SELECT * FROM _dataset WHERE total_amount > 27"
+                query = "SELECT * FROM dataset WHERE total_amount > 27"
             if per == "1":
-                query = "SELECT * FROM _dataset WHERE total_amount > 69"
+                query = "SELECT * FROM dataset WHERE total_amount > 69"
 
             start = time.time()
             record_batch_reader = conn.execute(query).fetch_record_batch(100000)
