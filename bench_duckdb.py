@@ -55,7 +55,6 @@ if __name__ == "__main__":
                 except:
                     break
             end = time.time()
-            conn.close()
             data[per].append(end-start)
             print(end-start)
 
