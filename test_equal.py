@@ -39,7 +39,7 @@ if __name__ == "__main__":
     conn = duckdb.connect()
     result_parquet = conn.execute(query).fetchdf()
     print(result_parquet)
-    print(result_parquet.info)
+    print(result_parquet.info())
     conn.close()
 
     format="skyhook"
