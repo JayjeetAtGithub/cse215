@@ -5,6 +5,8 @@ import time
 import multiprocessing as mp
 
 import duckdb
+from pandas.util.testing import assert_frame_equal
+
 import pyarrow.dataset as ds
 
 
@@ -60,3 +62,4 @@ if __name__ == "__main__":
     conn.close()
 
     print(result_parquet.equals(result_skyhook))
+    print(assert_frame_equal(result_parquet, result_skyhook))
