@@ -34,7 +34,7 @@ if __name__ == "__main__":
     with open(f"queries/q{query_no}.sql", "r") as f:
         query = f.read()
 
-    query = f"PRAGMA threads={mp.cpu_count()};\n{query}"
+    query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{query}"
     for _ in range(10):
         drop_caches()
         conn = duckdb.connect()
