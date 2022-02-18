@@ -36,6 +36,7 @@ if __name__ == "__main__":
     drop_caches()
     conn = duckdb.connect()
     result_parquet = conn.execute(query).fetchdf()
+    print(result_parquet)
     conn.close()
 
     format="skyhook"
@@ -55,6 +56,7 @@ if __name__ == "__main__":
     drop_caches()
     conn = duckdb.connect()
     result_skyhook = conn.execute(query).fetchdf()
+    print(result_skyhook)
     conn.close()
 
     print(result_parquet.equals(result_skyhook))
