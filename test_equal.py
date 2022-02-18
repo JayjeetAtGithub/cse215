@@ -5,7 +5,7 @@ import time
 import multiprocessing as mp
 
 import duckdb
-from pandas.util.testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 import pyarrow.dataset as ds
 
