@@ -39,4 +39,4 @@ if __name__ == "__main__":
     print(df)
 
     sns.barplot(data=df, ci="sd", x="query", y="latency", hue="format")
-    plt.savefig("plot_multi.pdf")
+    plt.savefig("plot.pdf")
