@@ -72,7 +72,7 @@ class SplittedParquetWriter(object):
         print(f"Finished writing in {e_time - s_time} seconds")
 
 if __name__ == "__main__":
-    chunksize = 16 * 1024 * 1024 # 16MB
+    chunksize = 13 * 1024 * 1024 # 13MB
     dataset_dir = str(sys.argv[1])
     for root, dirs, files in os.walk(dataset_dir):
         for file in files:

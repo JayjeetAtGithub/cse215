@@ -15,3 +15,4 @@ if __name__ == "__main__":
                     raise Exception(f"Too large file: {file_path} = {file_size} MB")
                 else:
                     print(f"OK ! {file_path} = {file_size} MB")
+    print("All files are OK")
