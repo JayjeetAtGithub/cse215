@@ -52,6 +52,6 @@ if __name__ == "__main__":
             "latency": e - s
         })
 
-    with open(f"results/bench_result.{query_no}.{format}.json", "w") as f:
+    with open(f"current_results/bench_result.{query_no}.{format}.json", "w") as f:
         f.write(json.dumps(data))
     print("Benchmark finished")
