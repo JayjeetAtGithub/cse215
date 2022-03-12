@@ -34,23 +34,24 @@ if __name__ == "__main__":
         "100": "SELECT * FROM dataset_",
     }
 
-    for sel in selectivity:
-        drop_caches()
-        conn = duckdb.connect()
-        s = time.time()
-        base_query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{queries[str(sel)]}"
-        result = conn.execute(base_query).fetchall()
-        e = time.time()
-        conn.close()
+    for _ in range(5):
+        for sel in selectivity:
+            drop_caches()
+            conn = duckdb.connect()
+            s = time.time()
+            base_query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{queries[str(sel)]}"
+            result = conn.execute(base_query).fetchall()
+            e = time.time()
+            conn.close()
 
-        log_str = f"{sel}|{format}|{e - s}"
-        print(log_str)
+            log_str = f"{sel}|{format}|{e - s}"
+            print(log_str)
 
-        data.append({
-            "query": sel,
-            "format": format,
-            "latency": e - s
-        })
+            data.append({
+                "query": sel,
+                "format": format,
+                "latency": e - s
+            })
 
     with open(f"nyctaxi_results/bench_result.{sel}.{format}.json", "w") as f:
         f.write(json.dumps(data))
