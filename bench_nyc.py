@@ -34,8 +34,8 @@ if __name__ == "__main__":
         "100": "SELECT * FROM dataset_",
     }
 
-    for _ in range(5):
-        for sel in selectivity:
+    for sel in selectivity:
+        for _ in range(5):
             drop_caches()
             conn = duckdb.connect()
             s = time.time()
@@ -53,6 +53,6 @@ if __name__ == "__main__":
                 "latency": e - s
             })
 
-    with open(f"nyctaxi_results/bench_result.{sel}.{format}.json", "w") as f:
-        f.write(json.dumps(data))
+        with open(f"nyctaxi_results/bench_result.{sel}.{format}.json", "w") as f:
+            f.write(json.dumps(data))
     print("Benchmark finished")
