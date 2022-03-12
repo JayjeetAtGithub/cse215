@@ -17,7 +17,7 @@ def drop_caches():
 
 
 if __name__ == "__main__":
-    format = str(sys.argv[3])
+    format = str(sys.argv[1])
 
     data = list()
     dataset_ = ds.dataset("/mnt/cephfs/dataset", format=format)
