@@ -38,7 +38,7 @@ if __name__ == "__main__":
         drop_caches()
         conn = duckdb.connect()
         s = time.time()
-        base_query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{queries[sel]}"
+        base_query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{queries[str(sel)]}"
         result = conn.execute(base_query).fetchall()
         e = time.time()
         conn.close()
