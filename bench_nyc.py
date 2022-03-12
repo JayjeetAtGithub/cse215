@@ -34,12 +34,12 @@ if __name__ == "__main__":
         "100": "SELECT * FROM dataset_",
     }
 
-    query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{query}"
     for sel in selectivity:
         drop_caches()
         conn = duckdb.connect()
         s = time.time()
-        result = conn.execute(queries[sel]).fetchall()
+        base_query = f"PRAGMA disable_object_cache;\nPRAGMA threads={mp.cpu_count()};\n{queries[sel]}"
+        result = conn.execute(base_query).fetchall()
         e = time.time()
         conn.close()
 
